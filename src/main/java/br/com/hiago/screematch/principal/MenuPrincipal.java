@@ -41,15 +41,6 @@ public class MenuPrincipal {
 
         temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.titulo())));
 
-//        List<String> nomes = Arrays.asList("Hiago", "Alessandra", "Arthur", "Laura");
-//
-//        nomes.stream()
-//                .sorted()
-//                .limit(3)
-//                .filter(n -> n.startsWith("A"))
-//                .map(n -> n.toUpperCase())
-//                .forEach(System.out::println);
-
         List<DadosEpisodios> dadosEpisodios = temporadas.stream()
                 .flatMap(t -> t.episodios().stream())
                 .collect(Collectors.toList());
