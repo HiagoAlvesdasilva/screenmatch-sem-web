@@ -3,12 +3,12 @@ package br.com.hiago.screematch.principal;
 import br.com.hiago.screematch.model.DadosEpisodios;
 import br.com.hiago.screematch.model.DadosSerie;
 import br.com.hiago.screematch.model.DadosTemporada;
+import br.com.hiago.screematch.model.Episodio;
 import br.com.hiago.screematch.service.ConsumoApi;
 import br.com.hiago.screematch.service.ConverteDados;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MenuPrincipal {
 
@@ -40,5 +40,33 @@ public class MenuPrincipal {
         temporadas.forEach(System.out::println);
 
         temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.titulo())));
+
+//        List<String> nomes = Arrays.asList("Hiago", "Alessandra", "Arthur", "Laura");
+//
+//        nomes.stream()
+//                .sorted()
+//                .limit(3)
+//                .filter(n -> n.startsWith("A"))
+//                .map(n -> n.toUpperCase())
+//                .forEach(System.out::println);
+
+        List<DadosEpisodios> dadosEpisodios = temporadas.stream()
+                .flatMap(t -> t.episodios().stream())
+                .collect(Collectors.toList());
+
+        System.out.println("\n Top 5 episodios: ");
+        dadosEpisodios.stream()
+                .filter(e -> !e.avaliacao().equalsIgnoreCase("N/A"))
+                .sorted(Comparator.comparing(DadosEpisodios:: avaliacao).reversed())
+                .limit(5)
+                .forEach(System.out::println);
+
+        List<Episodio> episodios = temporadas.stream()
+                .flatMap(t -> t.episodios().stream()
+                        .map(d -> new Episodio(t.numeroDeTemporadas(), d))
+                ).collect(Collectors.toList());
+
+        episodios.forEach(System.out::println);
     }
+
 }
