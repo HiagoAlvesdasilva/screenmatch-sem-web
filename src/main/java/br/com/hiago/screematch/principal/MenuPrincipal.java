@@ -1,5 +1,6 @@
 package br.com.hiago.screematch.principal;
 
+import br.com.hiago.screematch.model.DadosEpisodios;
 import br.com.hiago.screematch.model.DadosSerie;
 import br.com.hiago.screematch.model.DadosTemporada;
 import br.com.hiago.screematch.service.ConsumoApi;
@@ -37,5 +38,7 @@ public class MenuPrincipal {
             temporadas.add(dadosTemporada);
         }
         temporadas.forEach(System.out::println);
+
+        temporadas.forEach(t -> t.episodios().forEach(e -> System.out.println(e.titulo())));
     }
 }
