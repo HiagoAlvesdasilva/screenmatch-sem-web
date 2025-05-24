@@ -66,6 +66,20 @@ public class MenuPrincipal {
 
         episodios.forEach(System.out::println);
 
+        System.out.println("Digite o nome do Episodio que deseja buscar: ");
+        var trechoTitulo = leitura.nextLine();
+
+        List<Episodio> episodiosBuscados = episodios.stream()
+                .filter(e -> e.getTitulo().toUpperCase().contains(trechoTitulo.toUpperCase()))
+                .collect(Collectors.toList());
+
+        if (!episodiosBuscados.isEmpty()){
+            System.out.println("\nEpisodios encontrados: ");
+            episodiosBuscados.forEach(e -> System.out.println("Temporada: " + e.getTempodada() + " | Titulo: " + e.getTitulo()));
+        } else {
+            System.out.println("Episodio não encontrado!");
+        }
+
         System.out.println("A partir de que ano você deseja ver os episodios: ");
         var ano = leitura.nextInt();
         leitura.nextLine();
