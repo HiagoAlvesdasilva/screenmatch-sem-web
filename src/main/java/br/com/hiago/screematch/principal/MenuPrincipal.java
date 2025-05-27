@@ -95,6 +95,12 @@ public class MenuPrincipal {
                                 " Numero do Episodio: " + e.getNumeroEpisodio()+
                                 " Data de Lançamento: " + e.getDataLancamento().format(dateTimeFormatter)
                 ));
-    }
 
+        Map<Integer, Double> avaliacoesPorTemporada = episodios.stream()
+                .filter(e -> e.getAvaliacao() > 0.0)
+                .collect(Collectors.groupingBy(Episodio::getTempodada, Collectors.averagingDouble(Episodio::getAvaliacao)));
+
+        System.out.println("Avaliaçao das temporadas: " + avaliacoesPorTemporada);
+
+    }
 }
