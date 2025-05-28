@@ -102,5 +102,14 @@ public class MenuPrincipal {
 
         System.out.println("Avaliaçao das temporadas: " + avaliacoesPorTemporada);
 
+        DoubleSummaryStatistics est = episodios.stream()
+                .filter(e -> e.getAvaliacao() > 0.0)
+                .collect(Collectors.summarizingDouble(Episodio::getAvaliacao));
+
+        System.out.println("\nMedia: "+ est.getAverage() +
+                "\nMelhor episodio: "+ est.getMax()+
+                "\nPior episodio: "+ est.getMin() +
+                "\nQuantidades de episodios avaliados: "+ est.getCount());
+
     }
 }
