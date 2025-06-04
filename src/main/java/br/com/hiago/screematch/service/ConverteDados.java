@@ -1,6 +1,5 @@
 package br.com.hiago.screematch.service;
 
-import br.com.hiago.screematch.model.DadosSerie;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
