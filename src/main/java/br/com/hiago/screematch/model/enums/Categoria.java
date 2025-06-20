@@ -9,8 +9,11 @@ public enum Categoria {
 
     DRAMA("Drama"),
 
-    CRIME("Crime");
+    CRIME("Crime"),
 
+    ANIMACAO("Animation"),
+
+    AVENTURA("Adventure");
     private String categoriaOmdb;
 
     Categoria(String categoriaOmdb) {
