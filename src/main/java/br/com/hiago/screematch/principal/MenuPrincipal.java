@@ -1,9 +1,6 @@
 package br.com.hiago.screematch.principal;
 
-import br.com.hiago.screematch.model.DadosEpisodios;
-import br.com.hiago.screematch.model.DadosSerie;
-import br.com.hiago.screematch.model.DadosTemporada;
-import br.com.hiago.screematch.model.Episodio;
+import br.com.hiago.screematch.model.*;
 import br.com.hiago.screematch.service.ConsumoApi;
 import br.com.hiago.screematch.service.ConverteDados;
 
@@ -29,6 +26,7 @@ public class MenuPrincipal {
     public void exibeMenu() {
         var opcao = -1;
         while (opcao != 0) {
+
             var menu = """
                     1 - Buscar séries
                     2 - Buscar episódios
@@ -36,10 +34,16 @@ public class MenuPrincipal {
                     
                     0 - Sair                                 
                     """;
-
             System.out.println(menu);
-            opcao = leitura.nextInt();
-            leitura.nextLine();
+
+            String input =leitura.nextLine();
+
+            try {
+                opcao = Integer.parseInt(input);
+            } catch (NumberFormatException e){
+                System.out.println("Entrada inválida. Por favor digite um número entre 0 e 3");
+                continue;
+            }
 
             switch (opcao) {
                 case 1:
@@ -88,6 +92,12 @@ public class MenuPrincipal {
     }
 
     private void listarSeriesBuscadas(){
-        dadosSeries.forEach(System.out::println);
+        List<Serie> series = new ArrayList<>();
+        series = dadosSeries.stream()
+                        .map(d -> new Serie(d))
+                                .collect(Collectors.toList());
+        series.stream()
+                .sorted(Comparator.comparing(Serie::getGenero))
+                .forEach(System.out::println);
     }
 }
