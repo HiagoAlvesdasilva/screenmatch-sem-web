@@ -1,11 +1,11 @@
 package br.com.hiago.screematch.principal;
 
 import br.com.hiago.screematch.model.*;
+import br.com.hiago.screematch.repository.SerieRepository;
 import br.com.hiago.screematch.service.ConsumoApi;
 import br.com.hiago.screematch.service.ConverteDados;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -22,6 +22,12 @@ public class MenuPrincipal {
     private final String API_KEY = "&apikey=74979642";
 
     private List<DadosSerie> dadosSeries = new ArrayList<>();
+
+    private SerieRepository serieRepository;
+
+    public MenuPrincipal(SerieRepository serieRepository) {
+        this.serieRepository = serieRepository;
+    }
 
     public void exibeMenu() {
         var opcao = -1;
@@ -67,7 +73,8 @@ public class MenuPrincipal {
 
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
-        dadosSeries.add(dados);
+        Serie serie = new Serie(dados);
+        serieRepository.save(serie);
         System.out.println(dados);
     }
 
