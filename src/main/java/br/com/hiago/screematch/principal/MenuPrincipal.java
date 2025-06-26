@@ -43,7 +43,9 @@ public class MenuPrincipal {
                     1 - Buscar séries
                     2 - Buscar episódios
                     3 - Listar séries buscadas
-                    4 - Buscar série por Titulo
+                    4 - Buscar série por titulo
+                    5 - Buscar série por ator
+                    6 - Buscar séries por avaliação
                     0 - Sair                                 
                     """;
             System.out.println(menu);
@@ -53,7 +55,7 @@ public class MenuPrincipal {
             try {
                 opcao = Integer.parseInt(input);
             } catch (NumberFormatException e){
-                System.out.println("Entrada inválida. Por favor digite um número entre 0 e 3");
+                System.out.println("Entrada inválida. Por favor digite um número entre 0 e 6");
                 continue;
             }
 
@@ -69,6 +71,12 @@ public class MenuPrincipal {
                     break;
                 case 4:
                     buscarSeriePorTitulo();
+                    break;
+                case 5:
+                    buscarSeriePorAtor();
+                    break;
+                case 6:
+                    buscarSeriesPorAvaliacao();
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -140,5 +148,27 @@ public class MenuPrincipal {
         }else {
             System.out.println("Série não encontrada!");
         }
+    }
+
+    private void buscarSeriePorAtor(){
+        System.out.println("Qual o nome para busca? ");
+        var nomeAtor = leitura.nextLine().toLowerCase();
+        List<Serie> seriesEncontradas = serieRepository.findByAtoresContainingIgnoreCase(nomeAtor);
+        System.out.println("Séries em que "+ nomeAtor +" trabalhou: " );
+        seriesEncontradas.forEach(s -> System.out.println(s.getTitulo() + "avaliação: "+ s.getAvaliacao()));
+    }
+
+    private void buscarSeriesPorAvaliacao(){
+        System.out.println("Digite a avaliação minima da série que deseja pesquisar: ");
+        String entrada = leitura.nextLine().replace(",",".");
+        try {
+            double avaliacaoDigitada = Double.parseDouble(entrada);
+            List<Serie> avaliacoesEncontradas = serieRepository.findByAvaliacaoGreaterThanEqualOrderByAvaliacaoDesc(avaliacaoDigitada);
+            System.out.println("Series com Avaliação apartir de :" +avaliacaoDigitada);
+            avaliacoesEncontradas.forEach(s -> System.out.println(s.getTitulo() + " avaliação: "+ s.getAvaliacao()));
+        }catch (NumberFormatException e){
+            System.out.println("Valor inválido. Por favor, digite um número válido (ex: 8.5).");
+        }
+
     }
 }
