@@ -1,14 +1,29 @@
 package br.com.hiago.screematch.model;
 
+import jakarta.persistence.*;
+import org.hibernate.annotations.ManyToAny;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+@Entity
+@Table(name = "tb_episodios")
 public class Episodio {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private Integer tempodada;
     private String titulo;
     private Integer numeroEpisodio;
     private Double avaliacao;
     private LocalDate dataLancamento;
+
+    @ManyToOne
+    private Serie serie;
+
+    public Episodio() {}
 
     public Episodio(Integer numeroTemporada, DadosEpisodios dadosEpisodios) {
         this.tempodada = numeroTemporada;
@@ -26,6 +41,22 @@ public class Episodio {
         }catch (DateTimeParseException ex){
             this.dataLancamento = null;
         }
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Serie getSerie() {
+        return serie;
+    }
+
+    public void setSerie(Serie serie) {
+        this.serie = serie;
     }
 
     public Integer getTempodada() {
