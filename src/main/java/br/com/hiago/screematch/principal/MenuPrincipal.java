@@ -1,11 +1,11 @@
 package br.com.hiago.screematch.principal;
 
 import br.com.hiago.screematch.model.*;
+import br.com.hiago.screematch.model.enums.Categoria;
 import br.com.hiago.screematch.repository.EpisodioRepository;
 import br.com.hiago.screematch.repository.SerieRepository;
 import br.com.hiago.screematch.service.ConsumoApi;
 import br.com.hiago.screematch.service.ConverteDados;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,6 +46,9 @@ public class MenuPrincipal {
                     4 - Buscar série por titulo
                     5 - Buscar série por ator
                     6 - Buscar séries por avaliação
+                    7 - Buscar top 5 séries
+                    8 - Buscar séries por categoria ou gênero
+                    9 - Buscar Série por quantitade de temporadas e por notas de avaliação
                     0 - Sair                                 
                     """;
             System.out.println(menu);
@@ -78,15 +81,23 @@ public class MenuPrincipal {
                 case 6:
                     buscarSeriesPorAvaliacao();
                     break;
+                case 7:
+                    buscarTop5Series();
+                    break;
+                case 8:
+                    buscarSeriesPorCategoria();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
+                    break;
+                case 9:
+                    buscarSeriesPorTemporadasEAvaliacao();
                     break;
                 default:
                     System.out.println("Opção inválida");
             }
         }
     }
-
 
     private void buscarSerieWeb() {
         DadosSerie dados = getDadosSerie();
@@ -155,7 +166,7 @@ public class MenuPrincipal {
         var nomeAtor = leitura.nextLine().toLowerCase();
         List<Serie> seriesEncontradas = serieRepository.findByAtoresContainingIgnoreCase(nomeAtor);
         System.out.println("Séries em que "+ nomeAtor +" trabalhou: " );
-        seriesEncontradas.forEach(s -> System.out.println(s.getTitulo() + "avaliação: "+ s.getAvaliacao()));
+        seriesEncontradas.forEach(s -> System.out.println(s.getTitulo() + " avaliação: "+ s.getAvaliacao()));
     }
 
     private void buscarSeriesPorAvaliacao(){
@@ -169,6 +180,43 @@ public class MenuPrincipal {
         }catch (NumberFormatException e){
             System.out.println("Valor inválido. Por favor, digite um número válido (ex: 8.5).");
         }
-
     }
+
+    private void buscarTop5Series(){
+        List<Serie> topSeries = serieRepository.findTop5ByOrderByAvaliacaoDesc();
+        topSeries.forEach(s ->
+                System.out.println(s.getTitulo() + " avaliação: " + s.getAvaliacao()));
+    }
+
+    private void buscarSeriesPorCategoria() {
+        System.out.println("Digite a categoria/gênero desejada para buscar: ");
+        var nomeCategoria = leitura.nextLine().toLowerCase();
+        Categoria genero = Categoria.fromStringPortuges(nomeCategoria);
+        List<Serie> seriesPorCAtegoria = serieRepository.findByGenero(genero);
+        System.out.println("Series da categoria/gênero: "+ nomeCategoria);
+        seriesPorCAtegoria.forEach(System.out::println);
+    }
+
+    private void buscarSeriesPorTemporadasEAvaliacao() {
+        try {
+            System.out.println("Digite o número exato de temporadas desejado: ");
+            int temporadas = Integer.parseInt(leitura.nextLine());
+
+            System.out.println("Digite a avaliação mínima desejada (ex: 7.5)");
+            double avaliacao = Double.parseDouble(leitura.nextLine().replace(",", "."));
+
+            List<Serie> series = serieRepository.
+                    findByTotalTemporadasAndAvaliacaoGreaterThanEqualOrderByAvaliacaoDesc(temporadas, avaliacao);
+
+            if (series.isEmpty()){
+                System.out.println("Nenuma série encontrada com "+ temporadas + "teporada(s)");
+            }else {
+                System.out.println("Séries encontradas: ");
+                series.forEach(s -> System.out.println(s.getTitulo() +"- Temporadas: "+s.getTotalTemporadas() + " - Avaliação: " + s.getAvaliacao()));
+            }
+        }catch (NumberFormatException e){
+            System.out.println("ENtrada inválida. Certifique-se de digitar corretamente ");
+        }
+    }
+
 }

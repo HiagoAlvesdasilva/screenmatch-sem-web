@@ -1,28 +1,41 @@
 package br.com.hiago.screematch.model.enums;
 
 public enum Categoria {
-    ACAO("Action"),
+    ACAO("Action", "Ação"),
 
-    ROMANCE("Romance"),
+    ROMANCE("Romance", "Romance"),
 
-    COMEDIA("Comedy"),
+    COMEDIA("Comedy", "Comédia"),
 
-    DRAMA("Drama"),
+    DRAMA("Drama", "Drama"),
 
-    CRIME("Crime"),
+    CRIME("Crime", "Crime"),
 
-    ANIMACAO("Animation"),
+    ANIMACAO("Animation", "Animação"),
 
-    AVENTURA("Adventure");
+    AVENTURA("Adventure", "Aventura");
+
     private String categoriaOmdb;
 
-    Categoria(String categoriaOmdb) {
+    private String categoriaPortuges;
+
+    Categoria(String categoriaOmdb, String categoriaPortuges) {
         this.categoriaOmdb = categoriaOmdb;
+        this.categoriaPortuges = categoriaPortuges;
     }
 
     public static Categoria fromString (String text){
         for (Categoria categoria : Categoria.values()){
             if (categoria.categoriaOmdb.equalsIgnoreCase(text)){
+                return categoria;
+            }
+        }
+        throw new IllegalArgumentException("Nenhuma categoria foi encontrada para a série! ");
+    }
+
+    public static Categoria fromStringPortuges (String text){
+        for (Categoria categoria : Categoria.values()){
+            if (categoria.categoriaPortuges.equalsIgnoreCase(text)){
                 return categoria;
             }
         }
