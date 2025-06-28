@@ -1,6 +1,7 @@
 package br.com.hiago.screematch.repository;
 
 import br.com.hiago.screematch.model.Serie;
+import br.com.hiago.screematch.model.enums.Categoria;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -15,4 +16,9 @@ public interface SerieRepository extends JpaRepository <Serie, Long> {
 
     List<Serie> findByAvaliacaoGreaterThanEqualOrderByAvaliacaoDesc(Double avaliacao);
 
+    List<Serie> findTop5ByOrderByAvaliacaoDesc();
+
+    List<Serie> findByGenero(Categoria genero);
+
+    List<Serie> findByTotalTemporadasAndAvaliacaoGreaterThanEqualOrderByAvaliacaoDesc(Integer temporadas, Double avaliacao);
 }
