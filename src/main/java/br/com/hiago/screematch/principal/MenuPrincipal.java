@@ -205,8 +205,7 @@ public class MenuPrincipal {
             System.out.println("Digite a avaliação mínima desejada (ex: 7.5)");
             double avaliacao = Double.parseDouble(leitura.nextLine().replace(",", "."));
 
-            List<Serie> series = serieRepository.
-                    findByTotalTemporadasAndAvaliacaoGreaterThanEqualOrderByAvaliacaoDesc(temporadas, avaliacao);
+            List<Serie> series = serieRepository.seriesPorTemporadasEAvaliacao(temporadas,avaliacao);
 
             if (series.isEmpty()){
                 System.out.println("Nenuma série encontrada com "+ temporadas + "teporada(s)");
@@ -215,7 +214,7 @@ public class MenuPrincipal {
                 series.forEach(s -> System.out.println(s.getTitulo() +"- Temporadas: "+s.getTotalTemporadas() + " - Avaliação: " + s.getAvaliacao()));
             }
         }catch (NumberFormatException e){
-            System.out.println("ENtrada inválida. Certifique-se de digitar corretamente ");
+            System.out.println("Entrada inválida. Certifique-se de digitar corretamente ");
         }
     }
 
