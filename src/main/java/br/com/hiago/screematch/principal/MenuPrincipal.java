@@ -6,6 +6,7 @@ import br.com.hiago.screematch.repository.EpisodioRepository;
 import br.com.hiago.screematch.repository.SerieRepository;
 import br.com.hiago.screematch.service.ConsumoApi;
 import br.com.hiago.screematch.service.ConverteDados;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,6 +31,8 @@ public class MenuPrincipal {
 
     private List<Serie> series = new ArrayList<>();
 
+    private Optional<Serie> serieBusca;
+
     public MenuPrincipal(SerieRepository serieRepository, EpisodioRepository episodioRepository) {
         this.serieRepository = serieRepository;
         this.episodioRepository = episodioRepository;
@@ -40,15 +43,17 @@ public class MenuPrincipal {
         while (opcao != 0) {
 
             var menu = """
-                    1 - Buscar séries
-                    2 - Buscar episódios
-                    3 - Listar séries buscadas
-                    4 - Buscar série por titulo
-                    5 - Buscar série por ator
-                    6 - Buscar séries por avaliação
-                    7 - Buscar top 5 séries
-                    8 - Buscar séries por categoria ou gênero
-                    9 - Buscar Série por quantitade de temporadas e por notas de avaliação
+                    1  - Buscar séries
+                    2  - Buscar episódios
+                    3  - Listar séries buscadas
+                    4  - Buscar série por titulo
+                    5  - Buscar série por ator
+                    6  - Buscar séries por avaliação
+                    7  - Buscar top 5 séries
+                    8  - Buscar séries por categoria ou gênero
+                    9  - Buscar Série por quantitade de temporadas e por notas de avaliação
+                    10 - Buscar episódio por trecho
+                    11 - Buscar top 5 episódio por série
                     0 - Sair                                 
                     """;
             System.out.println(menu);
@@ -63,6 +68,9 @@ public class MenuPrincipal {
             }
 
             switch (opcao) {
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
                 case 1:
                     buscarSerieWeb();
                     break;
@@ -87,11 +95,14 @@ public class MenuPrincipal {
                 case 8:
                     buscarSeriesPorCategoria();
                     break;
-                case 0:
-                    System.out.println("Saindo...");
-                    break;
                 case 9:
                     buscarSeriesPorTemporadasEAvaliacao();
+                    break;
+                case 10:
+                    buscarEpisodioPorTrecho();
+                    break;
+                case 11:
+                    topEpisodiosPorSerie();
                     break;
                 default:
                     System.out.println("Opção inválida");
@@ -152,10 +163,10 @@ public class MenuPrincipal {
     private void buscarSeriePorTitulo() {
         System.out.println("Escolha uma serie pelo nome: ");
         var nomeSerie = leitura.nextLine().toLowerCase();
-        Optional<Serie> serieBuscada = serieRepository.findByTituloContainingIgnoreCase(nomeSerie);
+        serieBusca = serieRepository.findByTituloContainingIgnoreCase(nomeSerie);
 
-        if (serieBuscada.isPresent()){
-            System.out.println("Dados ds série" + serieBuscada.get());
+        if (serieBusca.isPresent()){
+            System.out.println("Dados ds série" + serieBusca.get());
         }else {
             System.out.println("Série não encontrada!");
         }
@@ -215,6 +226,32 @@ public class MenuPrincipal {
             }
         }catch (NumberFormatException e){
             System.out.println("Entrada inválida. Certifique-se de digitar corretamente ");
+        }
+    }
+
+    private void buscarEpisodioPorTrecho(){
+        System.out.println("Qual o nome do épisodio para busca? ");
+        var trechoEpisodio = leitura.nextLine().toLowerCase();
+        List<Episodio> episodiosEncontrados = serieRepository.episodioPorTrecho(trechoEpisodio);
+        episodiosEncontrados.forEach(e ->
+                System.out.printf("Série: %s Temporada %s - Episódio %s - %s\n",
+                e.getSerie().getTitulo(), e.getTemporada(),
+                        e.getNumeroEpisodio(), e.getTitulo()));
+    }
+
+    private void topEpisodiosPorSerie(){
+        buscarSeriePorTitulo();
+        if (serieBusca.isPresent()){
+            Serie serie = serieBusca.get();
+            List<Episodio> topEpisodios = serieRepository.topEpisodiosPorSerie(serie, PageRequest.of(0,5));
+            if (topEpisodios.isEmpty()) {
+                System.out.println("Nenhum episódio encontrado para essa série.");
+            } else {
+                System.out.println("Top 5 episódios da série " + serie.getTitulo() + ":");
+                topEpisodios.forEach(e ->
+                        System.out.printf("Temporada %d - Episódio %d: %s | Avaliação: %.1f\n",
+                                e.getTemporada(), e.getNumeroEpisodio(), e.getTitulo(), e.getAvaliacao()));
+            }
         }
     }
 
