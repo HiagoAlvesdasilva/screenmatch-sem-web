@@ -24,7 +24,7 @@ public interface SerieRepository extends JpaRepository <Serie, Long> {
 
     List<Serie> findByGenero(Categoria genero);
 
-    @Query( "select s from Serie s where s.totalTemporadas <= :temporadas and s.avaliacao >= :avaliacao")
+    @Query( "SELECT s FROM Serie s WHERE s.totalTemporadas <= :temporadas AND s.avaliacao >= :avaliacao")
     List<Serie> seriesPorTemporadasEAvaliacao(int temporadas, double avaliacao);
 
     @Query("SELECT e FROM Serie s JOIN s.episodios e WHERE e.titulo ILIKE %:trechoEpisodio%")
@@ -33,4 +33,6 @@ public interface SerieRepository extends JpaRepository <Serie, Long> {
     @Query("SELECT e FROM Serie s JOIN s.episodios e WHERE s = :serie ORDER BY e.avaliacao DESC")
     List<Episodio> topEpisodiosPorSerie(@Param("serie") Serie serie, Pageable pageable);
 
+    @Query("SELECT e FROM Serie s JOIN s.episodios e WHERE s = :serie AND YEAR (e.dataLancamento) >= :anoLancamento")
+    List<Episodio> episodiosPorSerieEAno(Serie serie, int anoLancamento);
 }
