@@ -1,11 +1,26 @@
 package br.com.hiago.screematch.controller;
 
+import br.com.hiago.screematch.dto.SerieDTO;
+import br.com.hiago.screematch.model.Serie;
+import br.com.hiago.screematch.repository.SerieRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class SerieController {
 
-    @GetMapping()
+    @Autowired
+    private SerieRepository repository;
+
+    @GetMapping("/series")
+    public List<SerieDTO> obterSeries(){
+        return repository.findAll().
+                stream().map(s -> new SerieDTO(s.getId(), s.getTitulo(), s.getTotalTemporadas(), s.getAvaliacao(), s.getGenero(),s.getAtores(), s.getPoster(), s.getSinopse()))
+                .collect(Collectors.toList());
+    }
 
 }
