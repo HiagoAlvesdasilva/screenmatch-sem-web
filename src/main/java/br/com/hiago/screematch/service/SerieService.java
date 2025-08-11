@@ -4,6 +4,7 @@ import br.com.hiago.screematch.dto.EpisodioDTO;
 import br.com.hiago.screematch.dto.SerieDTO;
 import br.com.hiago.screematch.model.Episodio;
 import br.com.hiago.screematch.model.Serie;
+import br.com.hiago.screematch.model.enums.Categoria;
 import br.com.hiago.screematch.repository.SerieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,7 +71,6 @@ public class SerieService {
     }
 
     public List<EpisodioDTO> buscarTemporadaPorNumero(Long id, Long numeroEpisodio) {
-        System.out.println("entando no metodo"+ id + numeroEpisodio);
         return repository.obterEpsidiosPorTemporada(id,numeroEpisodio)
                 .stream().map( e -> new EpisodioDTO(
                         e.getTemporada(),
@@ -78,6 +78,12 @@ public class SerieService {
                         e.getNumeroEpisodio(),
                         e.getDataLancamento()))
                 .collect(Collectors.toList());
+    }
+
+    public List<SerieDTO> obterSeriesPorCategoria(String nomeGenero) {
+        Categoria categoria = Categoria.fromStringPortuges(nomeGenero);
+        return converterListaDeSeries(repository.findByGenero(categoria));
+
     }
 
     private List<SerieDTO> converterListaDeSeries(List<Serie> serieList){

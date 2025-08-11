@@ -29,7 +29,7 @@ public class SerieController {
     }
 
     @GetMapping("/lancamentos")
-    public List<SerieDTO> BuscarSeriesLancamentos(){
+    public List<SerieDTO> buscarSeriesLancamentos(){
         return serieService.obterLancamentos();
     }
 
@@ -47,4 +47,10 @@ public class SerieController {
     public List<EpisodioDTO> obterTemporadaPorNumero(@PathVariable Long id, @PathVariable Long numeroEpisodio){
         return serieService.buscarTemporadaPorNumero(id, numeroEpisodio);
     }
+
+    @GetMapping("/categoria/{nomeGenero}")
+    public List<SerieDTO> buscarCategoria(@PathVariable String nomeGenero){
+        return serieService.obterSeriesPorCategoria(nomeGenero);
+    }
+    
 }
