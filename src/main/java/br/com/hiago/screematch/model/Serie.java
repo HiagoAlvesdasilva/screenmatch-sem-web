@@ -1,7 +1,7 @@
 package br.com.hiago.screematch.model;
 
 import br.com.hiago.screematch.model.enums.Categoria;
-import br.com.hiago.screematch.service.traducao.ConsultaMyMemory;
+import br.com.hiago.screematch.client.traducao.ConsultaMyMemory;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package br.com.hiago.screematch.service.traducao;
+package br.com.hiago.screematch.client.traducao;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

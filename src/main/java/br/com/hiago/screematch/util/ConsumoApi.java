@@ -1,4 +1,4 @@
-package br.com.hiago.screematch.service;
+package br.com.hiago.screematch.util;
 
 import java.io.IOException;
 import java.net.URI;

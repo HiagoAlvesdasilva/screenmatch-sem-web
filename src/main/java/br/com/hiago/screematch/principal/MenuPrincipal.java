@@ -4,8 +4,8 @@ import br.com.hiago.screematch.model.*;
 import br.com.hiago.screematch.model.enums.Categoria;
 import br.com.hiago.screematch.repository.EpisodioRepository;
 import br.com.hiago.screematch.repository.SerieRepository;
-import br.com.hiago.screematch.service.ConsumoApi;
-import br.com.hiago.screematch.service.ConverteDados;
+import br.com.hiago.screematch.util.ConsumoApi;
+import br.com.hiago.screematch.util.ConverteDados;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.*;

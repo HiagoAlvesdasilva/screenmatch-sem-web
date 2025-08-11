@@ -1,7 +1,7 @@
-package br.com.hiago.screematch.service.traducao;
+package br.com.hiago.screematch.client.traducao;
 
 
-import br.com.hiago.screematch.service.ConsumoApi;
+import br.com.hiago.screematch.util.ConsumoApi;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

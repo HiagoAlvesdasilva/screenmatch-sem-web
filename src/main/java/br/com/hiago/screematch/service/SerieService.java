@@ -69,6 +69,16 @@ public class SerieService {
         }
     }
 
+    public List<EpisodioDTO> buscarTemporadaPorNumero(Long id, Long numeroEpisodio) {
+        System.out.println("entando no metodo"+ id + numeroEpisodio);
+        return repository.obterEpsidiosPorTemporada(id,numeroEpisodio)
+                .stream().map( e -> new EpisodioDTO(
+                        e.getTemporada(),
+                        e.getTitulo(),
+                        e.getNumeroEpisodio(),
+                        e.getDataLancamento()))
+                .collect(Collectors.toList());
+    }
 
     private List<SerieDTO> converterListaDeSeries(List<Serie> serieList){
         return serieList.stream()
@@ -83,4 +93,5 @@ public class SerieService {
                         s.getSinopse()))
                 .collect(Collectors.toList());
     }
+
 }
